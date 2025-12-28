@@ -1,5 +1,5 @@
 import { DualSimplexSolver } from "./DualSimplex";
-import { BCNodeRecord, CutRecord, OptimizationResult } from "./types";
+import type { BCNodeRecord, CutRecord, OptimizationResult } from "./types";
 
 // Adicionar ao arquivo types.ts
 interface BCNode {
@@ -12,7 +12,7 @@ interface BCNode {
 }
 
 export class BranchAndCutSolver {
-  private bestObjective: number = Infinity;
+  private bestObjective: number = Number.POSITIVE_INFINITY;
   private bestSolution: number[] | null = null;
 
   private c: number[];
@@ -37,7 +37,7 @@ export class BranchAndCutSolver {
     this.nodeHistory = [];
     this.cutHistory = [];
     this.nodeIdCounter = 0;
-    this.bestObjective = Infinity;
+    this.bestObjective = Number.POSITIVE_INFINITY;
     this.bestSolution = null;
 
     // Inicializa fila com Nó Raiz
@@ -48,7 +48,7 @@ export class BranchAndCutSolver {
         depth: 0,
         constraints: this.initialA.map((r) => [...r]),
         rhs: [...this.initialB],
-        parentObjective: -Infinity,
+        parentObjective: Number.NEGATIVE_INFINITY,
       },
     ];
 
@@ -92,7 +92,7 @@ export class BranchAndCutSolver {
         }
 
         // Se viável, guarda dados
-        currentRecord.objectiveValue = parseFloat(
+        currentRecord.objectiveValue = Number.parseFloat(
           result.objectiveValue.toFixed(4)
         );
         currentRecord.solution = `[${result.solution
@@ -205,7 +205,7 @@ export class BranchAndCutSolver {
       depth: node.depth + 1,
       constraints: child1Constraints,
       rhs: child1Rhs,
-      parentObjective: -Infinity,
+      parentObjective: Number.NEGATIVE_INFINITY,
     });
 
     // Filho 2: x >= ceil  --> -x <= -ceil
@@ -221,12 +221,12 @@ export class BranchAndCutSolver {
     child2Rhs.push(-Math.ceil(val));
 
     queue.push({
-      id: node.id + 2,
+      id: rightId,
       parentId: node.id,
       depth: node.depth + 1,
       constraints: child2Constraints,
       rhs: child2Rhs,
-      parentObjective: -Infinity,
+      parentObjective: Number.NEGATIVE_INFINITY,
     });
   }
 
