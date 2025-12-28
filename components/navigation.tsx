@@ -13,6 +13,7 @@ export function Navigation() {
     { href: "/", label: "Home", icon: Home },
     { href: "/linear", label: "Otimização Linear", icon: Calculator },
     { href: "/discrete", label: "Otimização Discreta", icon: Network },
+    { href: "/branch-and-cut", label: "Branch and Cut", icon: Network },
   ];
 
   return (
