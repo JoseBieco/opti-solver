@@ -169,7 +169,7 @@ export default function LinearOptimizationPage() {
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-7xl">
-      <div className="mb-8">
+      <div className="mb-8" tabIndex={0}>
         <h1 className="text-3xl font-bold mb-2">Otimização Linear</h1>
         <p className="text-muted-foreground">
           Resolva problemas de programação linear usando o método Dual Simplex
@@ -180,8 +180,8 @@ export default function LinearOptimizationPage() {
       <div className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle>Configuração do Problema</CardTitle>
-            <CardDescription>
+            <CardTitle tabIndex={0}>Configuração do Problema</CardTitle>
+            <CardDescription tabIndex={0}>
               Defina a função objetivo e as restrições
             </CardDescription>
           </CardHeader>
@@ -189,7 +189,9 @@ export default function LinearOptimizationPage() {
             {/* Problem Type and Variables */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="problem-type">Tipo de Problema</Label>
+                <Label htmlFor="problem-type" tabIndex={0}>
+                  Tipo de Problema
+                </Label>
                 <Select
                   value={problemType}
                   onValueChange={(v) =>
@@ -206,7 +208,9 @@ export default function LinearOptimizationPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="num-vars">Número de Variáveis</Label>
+                <Label htmlFor="num-vars" tabIndex={0}>
+                  Número de Variáveis
+                </Label>
                 <Input
                   id="num-vars"
                   type="number"
@@ -224,7 +228,9 @@ export default function LinearOptimizationPage() {
 
             {/* Objective Function */}
             <div className="space-y-3">
-              <Label className="text-base font-semibold">Função Objetivo</Label>
+              <Label className="text-base font-semibold" tabIndex={0}>
+                Função Objetivo
+              </Label>
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
                   {problemType === "minimize" ? "Minimizar" : "Maximizar"} Z =
@@ -257,7 +263,9 @@ export default function LinearOptimizationPage() {
             {/* Constraints */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-base font-semibold">Restrições</Label>
+                <Label className="text-base font-semibold" tabIndex={0}>
+                  Restrições
+                </Label>
                 <Button
                   onClick={addConstraint}
                   size="sm"
@@ -342,9 +350,22 @@ export default function LinearOptimizationPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="<=">{"<="}</SelectItem>
-                              <SelectItem value=">=">{">="}</SelectItem>
-                              <SelectItem value="=">{"="}</SelectItem>
+                              <SelectItem value="<=">
+                                {/* Texto invisível visualmente, mas lido pelo narrador */}
+                                <span className="sr-only">Menor ou igual</span>
+                                {/* Símbolo visível, mas ignorado pelo narrador */}
+                                <span aria-hidden="true">{"<="}</span>
+                              </SelectItem>
+
+                              <SelectItem value=">=">
+                                <span className="sr-only">Maior ou igual</span>
+                                <span aria-hidden="true">{">="}</span>
+                              </SelectItem>
+
+                              <SelectItem value="=">
+                                <span className="sr-only">Igual a</span>
+                                <span aria-hidden="true">{"="}</span>
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <Input

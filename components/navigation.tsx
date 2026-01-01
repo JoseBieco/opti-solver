@@ -10,10 +10,25 @@ export function Navigation() {
   const pathname = usePathname();
 
   const links = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/linear", label: "Otimização Linear", icon: Calculator },
-    { href: "/discrete", label: "Otimização Discreta", icon: Network },
-    { href: "/branch-and-cut", label: "Branch and Cut", icon: Scissors },
+    { href: "/", label: "Home", icon: Home, lang: "en" },
+    {
+      href: "/linear",
+      label: "Otimização Linear",
+      icon: Calculator,
+      lang: "pt-br",
+    },
+    {
+      href: "/discrete",
+      label: "Otimização Discreta",
+      icon: Network,
+      lang: "pt-br",
+    },
+    {
+      href: "/branch-and-cut",
+      label: "Branch and Cut",
+      icon: Scissors,
+      lang: "en",
+    },
   ];
 
   return (
@@ -39,7 +54,7 @@ export function Navigation() {
                 >
                   <Link href={link.href}>
                     <Icon className="h-4 w-4" aria-hidden="true" />
-                    <span>{link.label}</span>
+                    <span lang={link.lang}>{link.label}</span>
                   </Link>
                 </Button>
               );

@@ -11,24 +11,29 @@ import Image from "next/image";
 
 export function ProfileCard() {
   return (
-    <Card className="max-w-4xl mx-auto">
+    <Card className="max-w-4xl mx-auto" tabIndex={0}>
       <CardHeader>
-        <CardTitle className="text-2xl">Sobre o Desenvolvedor</CardTitle>
-        <CardDescription>Informações do autor desta ferramenta</CardDescription>
+        <CardTitle className="text-2xl" tabIndex={0}>
+          Sobre o Desenvolvedor
+        </CardTitle>
+        <CardDescription tabIndex={0}>
+          Informações do autor desta ferramenta
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col md:flex-row gap-6 items-start">
           <div className="flex-shrink-0">
             <Image
               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=uqZV3EkAAAAJ&citpid=2"
-              alt="Foto de José Eduardo Saroba Bieco"
+              alt="Foto de José Eduardo Saroba Bieco afrente de umas das entradas de gramado, com o asfalto e um jardim de flores atrás dele."
               width={120}
               height={120}
               className="rounded-full border-2 border-border"
+              tabIndex={0}
             />
           </div>
 
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 space-y-4" tabIndex={0}>
             <div>
               <h3 className="text-xl font-semibold mb-1">
                 José Eduardo Saroba Bieco
@@ -87,7 +92,7 @@ export function ProfileCard() {
                   aria-label="Ver perfil LinkedIn de José Eduardo Saroba Bieco (abre em nova aba)"
                 >
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                  <span>LinkedIn</span>
+                  <span lang="en">LinkedIn</span>
                 </a>
               </Button>
 
@@ -121,7 +126,7 @@ export function ProfileCard() {
                   aria-label="Ver perfil Google Scholar de José Eduardo Saroba Bieco (abre em nova aba)"
                 >
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                  <span>Google Scholar</span>
+                  <span lang="en">Google Scholar</span>
                 </a>
               </Button>
             </div>

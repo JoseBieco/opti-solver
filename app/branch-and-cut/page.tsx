@@ -196,7 +196,7 @@ export default function BranchAndCutPage() {
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-7xl" tabIndex={-1}>
-      <div className="mb-8">
+      <div className="mb-8" tabIndex={0}>
         <h1 className="text-3xl font-bold mb-2">Branch and Cut</h1>
         <p className="text-muted-foreground">
           Resolva problemas de programação inteira usando o método Branch and
@@ -208,8 +208,8 @@ export default function BranchAndCutPage() {
       <div className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle>Configuração do Problema</CardTitle>
-            <CardDescription>
+            <CardTitle tabIndex={0}>Configuração do Problema</CardTitle>
+            <CardDescription tabIndex={0}>
               Defina a função objetivo, variáveis inteiras e as restrições
             </CardDescription>
           </CardHeader>
@@ -217,7 +217,9 @@ export default function BranchAndCutPage() {
             {/* Problem Type and Variables */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="problem-type-bc">Tipo de Problema</Label>
+                <Label htmlFor="problem-type-bc" tabIndex={0}>
+                  Tipo de Problema
+                </Label>
                 <Select
                   value={problemType}
                   onValueChange={(v) =>
@@ -234,7 +236,9 @@ export default function BranchAndCutPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="num-vars-bc">Número de Variáveis</Label>
+                <Label htmlFor="num-vars-bc" tabIndex={0}>
+                  Número de Variáveis
+                </Label>
                 <Input
                   id="num-vars-bc"
                   type="number"
@@ -252,7 +256,9 @@ export default function BranchAndCutPage() {
 
             {/* Objective Function */}
             <div className="space-y-3">
-              <Label className="text-base font-semibold">Função Objetivo</Label>
+              <Label className="text-base font-semibold" tabIndex={0}>
+                Função Objetivo
+              </Label>
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
                   {problemType === "minimize" ? "Minimizar" : "Maximizar"} Z =
@@ -284,7 +290,7 @@ export default function BranchAndCutPage() {
 
             {/* Integer Variables Selection */}
             <div className="space-y-3">
-              <Label className="text-base font-semibold">
+              <Label className="text-base font-semibold" tabIndex={0}>
                 Variáveis Inteiras
               </Label>
               <p className="text-sm text-muted-foreground">
@@ -313,7 +319,9 @@ export default function BranchAndCutPage() {
             {/* Constraints */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label className="text-base font-semibold">Restrições</Label>
+                <Label className="text-base font-semibold" tabIndex={0}>
+                  Restrições
+                </Label>
                 <Button
                   onClick={addConstraint}
                   size="sm"
@@ -398,9 +406,22 @@ export default function BranchAndCutPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="<=">{"<="}</SelectItem>
-                              <SelectItem value=">=">{">="}</SelectItem>
-                              <SelectItem value="=">{"="}</SelectItem>
+                              <SelectItem value="<=">
+                                {/* Texto invisível visualmente, mas lido pelo narrador */}
+                                <span className="sr-only">Menor ou igual</span>
+                                {/* Símbolo visível, mas ignorado pelo narrador */}
+                                <span aria-hidden="true">{"<="}</span>
+                              </SelectItem>
+
+                              <SelectItem value=">=">
+                                <span className="sr-only">Maior ou igual</span>
+                                <span aria-hidden="true">{">="}</span>
+                              </SelectItem>
+
+                              <SelectItem value="=">
+                                <span className="sr-only">Igual a</span>
+                                <span aria-hidden="true">{"="}</span>
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <Input
@@ -449,7 +470,9 @@ export default function BranchAndCutPage() {
               {nodeHistory.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Árvore Branch and Cut</CardTitle>
+                    <CardTitle>
+                      Árvore <span lang="en">Branch and Cut</span>
+                    </CardTitle>
                     <CardDescription>
                       Clique nos nós para ver detalhes da relaxação e cortes
                       aplicados. Use zoom para explorar

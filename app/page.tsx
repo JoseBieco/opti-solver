@@ -16,15 +16,27 @@ export default function HomePage() {
       <section className="py-20 md:py-32 bg-gradient-to-b from-background to-accent">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-balance">
+            <h1
+              className="text-4xl md:text-6xl font-bold tracking-tight text-balance"
+              tabIndex={0}
+            >
               Ferramenta de Otimização Matemática
             </h1>
-            <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
+            <p
+              className="text-xl text-muted-foreground text-pretty leading-relaxed"
+              tabIndex={0}
+            >
               Resolva problemas complexos de otimização linear e discreta usando
-              algoritmos avançados como Dual Simplex e Branch and Bound
+              algoritmos avançados como <span lang="en">Dual Simplex</span> e{" "}
+              <span lang="en">Branch and Bound</span>
             </p>
             <div className="flex gap-4 justify-center pt-4">
-              <Button asChild size="lg" className="gap-2 cursor-pointer">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="gap-2 cursor-pointer"
+              >
                 <Link href="/linear">
                   <Calculator className="h-5 w-5" aria-hidden="true" />
                   <span>Otimização Linear</span>
@@ -35,7 +47,7 @@ export default function HomePage() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="gap-2 bg-transparent cursor-pointer"
+                className="gap-2  cursor-pointer"
               >
                 <Link href="/discrete">
                   <Network className="h-5 w-5" aria-hidden="true" />
@@ -51,11 +63,14 @@ export default function HomePage() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">
+            <h2 className="text-3xl font-bold text-center mb-12" tabIndex={0}>
               Métodos Disponíveis
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="border-2 hover:border-primary transition-colors">
+              <Card
+                className="border-2 hover:border-primary transition-colors"
+                tabIndex={0}
+              >
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -69,19 +84,20 @@ export default function HomePage() {
                     </CardTitle>
                   </div>
                   <CardDescription className="text-base">
-                    Algoritmo Dual Simplex
+                    Algoritmo <span lang="en">Dual Simplex</span>
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground leading-relaxed">
                     Resolva problemas de programação linear com restrições de
-                    desigualdade. O método Dual Simplex é eficiente para
-                    problemas onde a otimalidade é mantida mas a viabilidade
-                    precisa ser restaurada.
+                    desigualdade. O método <span lang="en">Dual Simplex</span> é
+                    eficiente para problemas onde a otimalidade é mantida mas a
+                    viabilidade precisa ser restaurada.
                   </p>
                   <ul
                     className="space-y-2 text-sm text-muted-foreground"
                     aria-label="Recursos da otimização linear"
+                    tabIndex={0}
                   >
                     <li className="flex items-start gap-2">
                       <span className="text-primary mt-1">•</span>
@@ -109,7 +125,10 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 hover:border-secondary transition-colors">
+              <Card
+                className="border-2 hover:border-secondary transition-colors"
+                tabIndex={0}
+              >
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <div className="h-12 w-12 rounded-lg bg-secondary/10 flex items-center justify-center">
@@ -123,18 +142,19 @@ export default function HomePage() {
                     </CardTitle>
                   </div>
                   <CardDescription className="text-base">
-                    Algoritmo Branch and Bound
+                    Algoritmo <span lang="en">Branch and Bound</span>
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground leading-relaxed">
                     Resolva problemas de programação inteira usando o algoritmo
-                    Branch and Bound. Explore a árvore de decisão e entenda o
-                    processo de ramificação e poda.
+                    <span lang="en">Branch and Bound</span>. Explore a árvore de
+                    decisão e entenda o processo de ramificação e poda.
                   </p>
                   <ul
                     className="space-y-2 text-sm text-muted-foreground"
                     aria-label="Recursos da otimização discreta"
+                    tabIndex={0}
                   >
                     <li className="flex items-start gap-2">
                       <span className="text-secondary mt-1">•</span>
@@ -166,7 +186,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-muted/30" tabIndex={0}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <h2 className="text-2xl font-bold">Acessibilidade e Usabilidade</h2>
