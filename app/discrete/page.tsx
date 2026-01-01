@@ -23,7 +23,7 @@ import { Plus, Trash2, Play, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { BranchAndBoundSolver } from "@/lib/optimization/BranchAndBound";
 import type { OptimizationResult } from "@/lib/optimization/types";
-import { BranchAndBoundTree } from "@/components/branch-and-bound-tree";
+import { BranchAndCutTree } from "@/components/branch-and-cut-tree";
 
 type ConstraintType = "<=" | ">=" | "=";
 
@@ -445,7 +445,18 @@ export default function DiscreteOptimizationPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <BranchAndBoundTree history={solver.getHistory()} />
+                    {/* <BranchAndBoundTree history={solver.getHistory()} /> */}
+
+                    <BranchAndCutTree
+                      nodeHistory={solver.getHistory().map((node) => ({
+                        ...node,
+                        // O novo componente espera 'cutsApplied' (mesmo que 0)
+                        cutsApplied: 0,
+                        // Mapeia parentId 0 para -1 se necessário, ou mantém se o componente tratar
+                        // Ajustamos qualquer campo extra aqui se precisar
+                      }))}
+                      cutHistory={[]} // B&B puro não tem cortes
+                    />
                   </CardContent>
                 </Card>
               )}
