@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { AccessibilityBar } from "@/components/accessibility-bar";
+import { Navigation } from "@/components/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,10 +21,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Trash2, Play, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Play, AlertCircle, Scissors } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { BranchAndBoundSolver } from "@/lib/optimization/BranchAndBound";
-import type { OptimizationResult } from "@/lib/optimization/types";
+import { BranchAndCutSolver } from "@/lib/optimization/BranchAndCut";
+import type {
+  OptimizationResult,
+  BCNodeRecord,
+  CutRecord,
+} from "@/lib/optimization/types";
 import { BranchAndCutTree } from "@/components/branch-and-cut-tree";
 
 type ConstraintType = "<=" | ">=" | "=";
@@ -34,7 +40,7 @@ interface Constraint {
   rhs: number;
 }
 
-export default function DiscreteOptimizationPage() {
+export default function BranchAndCutPage() {
   const [numVars, setNumVars] = useState(2);
   const [problemType, setProblemType] = useState<"minimize" | "maximize">(
     "minimize"
@@ -45,7 +51,8 @@ export default function DiscreteOptimizationPage() {
     { id: "1", coefficients: [1, 1], type: "<=", rhs: 10 },
   ]);
   const [result, setResult] = useState<OptimizationResult | null>(null);
-  const [solver, setSolver] = useState<BranchAndBoundSolver | null>(null);
+  const [nodeHistory, setNodeHistory] = useState<BCNodeRecord[]>([]);
+  const [cutHistory, setCutHistory] = useState<CutRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const handleNumVarsChange = (value: string) => {
@@ -124,12 +131,13 @@ export default function DiscreteOptimizationPage() {
     try {
       setError(null);
       setResult(null);
-      setSolver(null);
+      setNodeHistory([]);
+      setCutHistory([]);
 
       // Verificar se há pelo menos uma variável inteira
       if (!integerVars.some((v) => v)) {
         setError(
-          "Selecione pelo menos uma variável inteira para usar Branch and Bound"
+          "Selecione pelo menos uma variável inteira para usar Branch and Cut"
         );
         return;
       }
@@ -164,8 +172,9 @@ export default function DiscreteOptimizationPage() {
         .map((isInt, i) => (isInt ? i : -1))
         .filter((i) => i !== -1);
 
-      const bbSolver = new BranchAndBoundSolver(c, A, b, integerIndices);
-      const solution = bbSolver.solve();
+      const bcSolver = new BranchAndCutSolver(c, A, b, integerIndices);
+      const solution = bcSolver.solve();
+      const history = bcSolver.getHistory();
 
       // Se foi maximização, converter o valor objetivo de volta
       if (problemType === "maximize") {
@@ -173,7 +182,10 @@ export default function DiscreteOptimizationPage() {
       }
 
       setResult(solution);
-      setSolver(bbSolver);
+      setNodeHistory(history.nodes);
+      setCutHistory(history.cuts);
+      console.log(history.nodes);
+      console.log(history.cuts);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Erro ao resolver o problema"
@@ -183,12 +195,12 @@ export default function DiscreteOptimizationPage() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8 max-w-7xl">
+    <main className="container mx-auto px-4 py-8 max-w-7xl" tabIndex={-1}>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Otimização Discreta</h1>
+        <h1 className="text-3xl font-bold mb-2">Branch and Cut</h1>
         <p className="text-muted-foreground">
           Resolva problemas de programação inteira usando o método Branch and
-          Bound
+          Cut com cortes de Gomory
         </p>
       </div>
 
@@ -203,18 +215,16 @@ export default function DiscreteOptimizationPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Problem Type and Variables */}
-            <div className="grid grid-cols-2 gap-4 cursor-pointer">
-              <div className="space-y-2 cursor-pointer">
-                <Label htmlFor="problem-type-discrete cursor-pointer">
-                  Tipo de Problema
-                </Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="problem-type-bc">Tipo de Problema</Label>
                 <Select
                   value={problemType}
                   onValueChange={(v) =>
                     setProblemType(v as "minimize" | "maximize")
                   }
                 >
-                  <SelectTrigger id="problem-type-discrete">
+                  <SelectTrigger id="problem-type-bc">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -224,17 +234,17 @@ export default function DiscreteOptimizationPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="num-vars-discrete">Número de Variáveis</Label>
+                <Label htmlFor="num-vars-bc">Número de Variáveis</Label>
                 <Input
-                  id="num-vars-discrete"
+                  id="num-vars-bc"
                   type="number"
                   min="1"
                   max="10"
                   value={numVars}
                   onChange={(e) => handleNumVarsChange(e.target.value)}
-                  aria-describedby="num-vars-discrete-help"
+                  aria-describedby="num-vars-bc-help"
                 />
-                <span id="num-vars-discrete-help" className="sr-only">
+                <span id="num-vars-bc-help" className="sr-only">
                   Escolha entre 1 e 10 variáveis
                 </span>
               </div>
@@ -333,7 +343,7 @@ export default function DiscreteOptimizationPage() {
                             aria-label={`Remover restrição ${idx + 1}`}
                           >
                             <Trash2
-                              className="h-4 w-4 text-destructive"
+                              className="h-4 w-4 text-destructive cursor-pointer"
                               aria-hidden="true"
                             />
                           </Button>
@@ -435,32 +445,83 @@ export default function DiscreteOptimizationPage() {
 
           {result && (
             <div className="space-y-6">
-              {solver && (
+              {/* Árvore Branch and Cut */}
+              {nodeHistory.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Árvore Branch and Bound</CardTitle>
+                    <CardTitle>Árvore Branch and Cut</CardTitle>
                     <CardDescription>
-                      Clique nos nós para ver detalhes. Use os botões de zoom
-                      para navegar
+                      Clique nos nós para ver detalhes da relaxação e cortes
+                      aplicados. Use zoom para explorar
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {/* <BranchAndBoundTree history={solver.getHistory()} /> */}
-
                     <BranchAndCutTree
-                      nodeHistory={solver.getHistory().map((node) => ({
-                        ...node,
-                        // O novo componente espera 'cutsApplied' (mesmo que 0)
-                        cutsApplied: 0,
-                        // Mapeia parentId 0 para -1 se necessário, ou mantém se o componente tratar
-                        // Ajustamos qualquer campo extra aqui se precisar
-                      }))}
-                      cutHistory={[]} // B&B puro não tem cortes
+                      nodeHistory={nodeHistory}
+                      cutHistory={cutHistory}
                     />
                   </CardContent>
                 </Card>
               )}
 
+              {/* Histórico de Cortes de Gomory */}
+              {cutHistory.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Scissors className="h-5 w-5" aria-hidden="true" />
+                      Cortes de Gomory Aplicados
+                    </CardTitle>
+                    <CardDescription>
+                      {cutHistory.filter((c) => c.status === "Applied").length}{" "}
+                      corte(s) aplicado(s) durante a execução
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                      {cutHistory.map((cut, idx) => (
+                        <Card
+                          key={`cut-${idx}`}
+                          className={
+                            cut.status === "Applied"
+                              ? "border-green-500/50 bg-green-50/50 dark:bg-green-950/20"
+                              : "border-muted bg-muted/30"
+                          }
+                        >
+                          <CardContent className="pt-4 pb-3">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 space-y-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-semibold bg-background px-2 py-0.5 rounded">
+                                    Nó {cut.nodeId}
+                                  </span>
+                                  <span className="text-xs text-muted-foreground">
+                                    Iteração {cut.iteration}
+                                  </span>
+                                  <span
+                                    className={`text-xs font-medium px-2 py-0.5 rounded ${
+                                      cut.status === "Applied"
+                                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                                        : "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
+                                    }`}
+                                  >
+                                    {cut.status}
+                                  </span>
+                                </div>
+                                <p className="text-sm font-mono text-muted-foreground">
+                                  {cut.generatedConstraint}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Resultados numéricos */}
               <Card>
                 <CardHeader>
                   <CardTitle>Resultado</CardTitle>

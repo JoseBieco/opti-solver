@@ -29,7 +29,7 @@ export function Footer() {
               className="gap-2 bg-transparent cursor-pointer"
             >
               <a
-                href="https://github.com/InvOptLab/opti-solver"
+                href="https://github.com/JoseBieco/opti-solver"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Ver repositório no GitHub (abre em nova aba)"
