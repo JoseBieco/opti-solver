@@ -18,6 +18,9 @@ export class DualSimplexSolver {
   // Para evitar loops infinitos
   private maxIterations;
 
+  public primalIterations: number = 0;
+  public dualIterations: number = 0;
+
   /**
    * Inicializa o Solver.
    * Assume problema de **MINIMIZAÇÃO** na forma padrão:
@@ -114,10 +117,10 @@ export class DualSimplexSolver {
    * Objetivo: Eliminar custos reduzidos negativos na linha Z.
    */
   private runPrimalSimplex(): SolutionStatus {
-    let iterations = 0;
+    //let iterations = 0;
     const maxIterations = 1000;
 
-    while (iterations < maxIterations) {
+    while (this.primalIterations < maxIterations) {
       // Escolher quem ENTRA (Coluna com custo mais negativo)
       const pivotCol = this.getPrimalEnteringVariable();
 
@@ -136,7 +139,8 @@ export class DualSimplexSolver {
 
       // Pivotar
       this.pivot(pivotRow, pivotCol);
-      iterations++;
+      this.primalIterations++;
+      console.log(this.primalIterations);
     }
     return "MaxIterations";
   }
@@ -188,15 +192,15 @@ export class DualSimplexSolver {
    * Executa o algoritmo Dual Simplex.
    */
   private runDualSimplex(): OptimizationResult {
-    let iterations = 0;
+    // let iterations = 0;
 
-    while (iterations < this.maxIterations) {
+    while (this.dualIterations < this.maxIterations) {
       // Escolher quem SAI (Linha com RHS mais negativo)
       const pivotRow = this.getLeavingVariable(); // (Método original do Dual)
 
       // Se todos RHS >= 0, temos a solução Ótima e Viável
       if (pivotRow === -1) {
-        return this.extractSolution(iterations, "Optimal");
+        return this.extractSolution(this.dualIterations, "Optimal");
       }
 
       // Escolher quem ENTRA (Teste da Razão Dual)
@@ -204,15 +208,16 @@ export class DualSimplexSolver {
 
       // Se impossível pivotar, o problema é inviável
       if (pivotCol === -1) {
-        return this.extractSolution(iterations, "Infeasible");
+        return this.extractSolution(this.dualIterations, "Infeasible");
       }
 
       // Pivotar
       this.pivot(pivotRow, pivotCol);
-      iterations++;
+      this.dualIterations++;
+      console.log(this.dualIterations);
     }
 
-    return this.extractSolution(iterations, "MaxIterations");
+    return this.extractSolution(this.dualIterations, "MaxIterations");
   }
 
   /**

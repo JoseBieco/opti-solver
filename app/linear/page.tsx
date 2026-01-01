@@ -45,6 +45,11 @@ export default function LinearOptimizationPage() {
   const [result, setResult] = useState<OptimizationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const [iterations, setIterations] = useState<{
+    primal: number;
+    dual: number;
+  }>({ primal: 0, dual: 0 });
+
   const handleNumVarsChange = (value: string) => {
     const num = Number.parseInt(value);
     if (num > 0 && num <= 10) {
@@ -147,6 +152,11 @@ export default function LinearOptimizationPage() {
       if (problemType === "maximize") {
         solution.objectiveValue = -solution.objectiveValue;
       }
+
+      setIterations({
+        primal: solver.primalIterations,
+        dual: solver.dualIterations,
+      });
 
       setResult(solution);
     } catch (err) {
@@ -415,11 +425,30 @@ export default function LinearOptimizationPage() {
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t">
-                    <Label className="text-sm text-muted-foreground">
-                      Iterações
-                    </Label>
-                    <p className="text-lg font-semibold">{result.iterations}</p>
+                  <div className="pt-4 border-t space-y-3">
+                    <Label className="text-base font-semibold">Iterações</Label>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Primeira Fase */}
+                      <div className="flex flex-col p-2 rounded-md bg-muted/20">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                          Primeira Fase
+                        </span>
+                        <span className="text-2xl font-bold font-mono text-foreground mt-1">
+                          {iterations.primal}
+                        </span>
+                      </div>
+
+                      {/* Segunda Fase */}
+                      <div className="flex flex-col p-2 rounded-md bg-muted/20">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                          Segunda Fase
+                        </span>
+                        <span className="text-2xl font-bold font-mono text-foreground mt-1">
+                          {iterations.dual}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
