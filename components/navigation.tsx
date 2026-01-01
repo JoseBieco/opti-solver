@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Calculator, Home, Network } from "lucide-react";
+import { Calculator, Home, Network, Scissors } from "lucide-react";
 
 export function Navigation() {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ export function Navigation() {
     { href: "/", label: "Home", icon: Home },
     { href: "/linear", label: "Otimização Linear", icon: Calculator },
     { href: "/discrete", label: "Otimização Discreta", icon: Network },
-    { href: "/branch-and-cut", label: "Branch and Cut", icon: Network },
+    { href: "/branch-and-cut", label: "Branch and Cut", icon: Scissors },
   ];
 
   return (
