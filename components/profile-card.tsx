@@ -6,19 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, ExternalLink } from "lucide-react";
+import { Mail, ExternalLink, Globe } from "lucide-react";
 import Image from "next/image";
 
 export function ProfileCard() {
   return (
-    <Card className="max-w-4xl mx-auto" tabIndex={0}>
+    <Card className="max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl" tabIndex={0}>
-          Sobre o Desenvolvedor
-        </CardTitle>
-        <CardDescription tabIndex={0}>
-          Informações do autor desta ferramenta
-        </CardDescription>
+        <CardTitle className="text-2xl">Sobre o Desenvolvedor</CardTitle>
+        <CardDescription>Informações do autor desta ferramenta</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col md:flex-row gap-6 items-start">
@@ -29,18 +25,17 @@ export function ProfileCard() {
               width={120}
               height={120}
               className="rounded-full border-2 border-border"
-              tabIndex={0}
             />
           </div>
 
-          <div className="flex-1 space-y-4" tabIndex={0}>
+          <div className="flex-1 space-y-4">
             <div>
               <h3 className="text-xl font-semibold mb-1">
                 José Eduardo Saroba Bieco
               </h3>
               <p className="text-muted-foreground leading-relaxed">
                 Engenheiro da Computação (FACENS), Especialista em IA (UTFPR) e
-                Mestrando (ICMC - USP), com foco de pesquisa em Otimização.
+                Mestre (ICMC - USP), com foco de pesquisa em Otimização.
                 <br />
                 <strong>Email:</strong> jose.bieco@usp.br
               </p>
@@ -59,6 +54,23 @@ export function ProfileCard() {
                 >
                   <Mail className="h-4 w-4" aria-hidden="true" />
                   <span>Email</span>
+                </a>
+              </Button>
+
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-transparent"
+              >
+                <a
+                  href="https://josebieco.github.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Ver site pessoal de José Eduardo Saroba Bieco (abre em nova aba)"
+                >
+                  <Globe className="h-4 w-4" aria-hidden="true" />
+                  <span>Site Pessoal</span>
                 </a>
               </Button>
 
