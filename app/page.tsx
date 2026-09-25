@@ -11,6 +11,8 @@ import Link from "next/link";
 import { ProfileCard } from "@/components/profile-card";
 import Image from "next/image";
 
+import iconUrl from "@/public/icon.svg";
+
 export default function HomePage() {
   return (
     <main className="flex-1">
@@ -31,10 +33,8 @@ export default function HomePage() {
             <div className="relative mb-4">
               <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-30 animate-pulse"></div>
               <Image 
-                src="/icon.svg" 
+                src={iconUrl} 
                 alt="OptiSolver Logo Hero" 
-                width={120} 
-                height={120}
                 className="relative rounded-2xl shadow-xl border border-background/50"
               />
             </div>

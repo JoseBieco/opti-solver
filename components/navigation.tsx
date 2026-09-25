@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Calculator, Home, Network, Scissors } from "lucide-react";
 
+import iconUrl from "@/public/icon.svg";
+
 export function Navigation() {
   const pathname = usePathname();
 
@@ -38,11 +40,9 @@ export function Navigation() {
         <div className="flex h-16 items-center gap-8">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <Image 
-              src="/icon.svg" 
+              src={iconUrl} 
               alt="OptiSolver Logo" 
-              width={32} 
-              height={32} 
-              className="rounded-lg shadow-sm"
+              className="rounded-lg shadow-sm w-8 h-8"
             />
             <span>OptiSolver</span>
           </Link>

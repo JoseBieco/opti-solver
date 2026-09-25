@@ -15,10 +15,6 @@ export const metadata: Metadata = {
   title: "OptiSolver - Ferramenta de Otimização",
   description:
     "Ferramenta web para resolver problemas de otimização linear e discreta usando Dual Simplex e Branch and Bound",
-  icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
-  },
 };
 
 export default function RootLayout({
