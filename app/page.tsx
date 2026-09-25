@@ -29,17 +29,17 @@ export default function HomePage() {
         </div>
 
         <div className="container relative z-10 mx-auto px-4">
-          <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-8">
-            <div className="relative mb-4">
+          <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-6">
+            <div className="relative mb-2">
               <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-30 animate-pulse"></div>
               <Image 
                 src={iconUrl} 
                 alt="OptiSolver Logo Hero" 
-                className="relative rounded-2xl shadow-xl border border-background/50"
+                className="relative rounded-2xl shadow-xl border border-background/50 w-20 h-20 md:w-24 md:h-24"
               />
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-balance bg-clip-text text-transparent bg-gradient-to-br from-foreground to-foreground/70">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-balance bg-clip-text text-transparent bg-gradient-to-br from-foreground to-foreground/70">
               Otimização Matemática <br className="hidden md:block"/>Simplificada
             </h1>
             
