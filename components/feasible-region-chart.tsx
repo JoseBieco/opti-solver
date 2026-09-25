@@ -31,7 +31,7 @@ interface FeasibleRegionChartProps {
 }
 
 // Renderizador robusto para o ponto ótimo
-const RenderOptimalPoint = (props: any) => {
+const RenderOptimalPoint = (props: any /* FIXME */) => {
   const { cx, cy } = props;
 
   // Verificação de segurança para coordenadas
@@ -71,7 +71,7 @@ const RenderOptimalPoint = (props: any) => {
   );
 };
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }: any /* FIXME */) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-popover border border-border rounded-lg shadow-md p-3 text-sm z-50">
@@ -213,12 +213,12 @@ export function FeasibleRegionChart({
   }, [constraints, bounds]);
 
   const chartData = useMemo(() => {
-    const allData: any[] = [];
+    const allData: any[] = []; // FIXME
     const numPoints = 400;
 
     for (let i = 0; i <= numPoints; i++) {
       const x = (bounds.maxX / numPoints) * i;
-      const point: any = { x };
+      const point: Record<string, any> = { x };
 
       constraints.forEach((constraint, idx) => {
         const [a, b] = constraint.coefficients;

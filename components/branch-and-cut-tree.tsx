@@ -15,7 +15,7 @@ import {
 import type { BCNodeRecord, CutRecord } from "@/lib/optimization/types";
 
 export interface TreeProps {
-  nodeHistory: (BCNodeRecord | any)[];
+  nodeHistory: BCNodeRecord[];
   cutHistory?: CutRecord[];
 }
 
@@ -25,7 +25,7 @@ interface LayoutNode {
   parentId: number;
   x: number; // Coordenada Absoluta X
   y: number; // Coordenada Absoluta Y
-  data: any;
+  data: BCNodeRecord;
   cutsApplied: CutRecord[];
   isOptimal: boolean;
   children: LayoutNode[]; // Mantemos a referência para percurso, se necessário
@@ -51,23 +51,23 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
 
     // 1. Preparação dos dados e identificação do Ótimo
     const integerNodes = nodeHistory.filter(
-      (n: any) => n.status === "Inteiro" || n.status === "Integer Found"
+      (n: BCNodeRecord) => n.status === "Inteiro" || n.status === "Integer Found"
     );
     let optimalNodeId: number | null = null;
     if (integerNodes.length > 0) {
-      const getVal = (n: any) =>
+      const getVal = (n: BCNodeRecord) =>
         typeof n.objectiveValue === "string"
           ? parseFloat(n.objectiveValue)
           : n.objectiveValue;
-      const optimalNode = integerNodes.reduce((best: any, current: any) =>
+      const optimalNode = integerNodes.reduce((best: BCNodeRecord, current: BCNodeRecord) =>
         getVal(current) < getVal(best) ? current : best
       );
       optimalNodeId = optimalNode.id;
     }
 
     // Mapa temporário para construir a árvore
-    const nodeMap = new Map<number, any>();
-    nodeHistory.forEach((record: any) => {
+    const nodeMap = new Map<number, any>(); // TODO tipagem
+    nodeHistory.forEach((record: BCNodeRecord) => {
       nodeMap.set(record.id, {
         ...record,
         children: [],
@@ -105,7 +105,7 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
 
     // 3. Algoritmo de Layout (Reingold-Tilford simplificado)
     // Passo A: Calcular larguras e posições RELATIVAS (bottom-up)
-    const calculateRelativePositions = (node: any, depth: number) => {
+    const calculateRelativePositions = (node: any /* LayoutNode */, depth: number) => {
       node.depth = depth;
 
       if (node.children.length === 0) {
@@ -114,7 +114,7 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
       }
 
       let totalWidth = 0;
-      node.children.forEach((child: any) => {
+      node.children.forEach((child: any /* LayoutNode */) => {
         calculateRelativePositions(child, depth + 1);
         totalWidth += child.width;
       });
@@ -123,7 +123,7 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
 
       // Distribui os filhos centralizados abaixo do pai
       let currentX = -totalWidth / 2;
-      node.children.forEach((child: any) => {
+      node.children.forEach((child: any /* LayoutNode */) => {
         child.relX = currentX + child.width / 2;
         currentX += child.width;
       });
@@ -135,7 +135,7 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
     const finalNodes: LayoutNode[] = [];
     const finalEdges: { from: LayoutNode; to: LayoutNode; type: string }[] = [];
 
-    const calculateAbsoluteCoordinates = (node: any, x: number, y: number) => {
+    const calculateAbsoluteCoordinates = (node: any /* LayoutNode */, x: number, y: number) => {
       const layoutNode: LayoutNode = {
         id: node.id,
         parentId: node.parentId,
@@ -149,7 +149,7 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
 
       finalNodes.push(layoutNode);
 
-      node.children.forEach((child: any) => {
+      node.children.forEach((child: any /* LayoutNode */) => {
         // O X do filho é o X do pai + o deslocamento relativo do filho
         const childAbsX = x + child.relX;
         const childAbsY = y + 120; // Espaçamento vertical fixo
@@ -236,17 +236,17 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
     <div className="space-y-4">
       {/* Controles de Zoom */}
       <div className="flex items-center gap-2 justify-end">
-        <Button onClick={handleZoomOut} size="sm" variant="outline">
-          <ZoomOut className="h-4 w-4" />
+        <Button onClick={handleZoomOut} size="sm" variant="outline" aria-label="Diminuir zoom">
+          <ZoomOut className="h-4 w-4" aria-hidden="true" />
         </Button>
-        <span className="text-sm font-mono w-16 text-center">
+        <span className="text-sm font-mono w-16 text-center" aria-live="polite">
           {Math.round(zoom * 100)}%
         </span>
-        <Button onClick={handleZoomIn} size="sm" variant="outline">
-          <ZoomIn className="h-4 w-4" />
+        <Button onClick={handleZoomIn} size="sm" variant="outline" aria-label="Aumentar zoom">
+          <ZoomIn className="h-4 w-4" aria-hidden="true" />
         </Button>
-        <Button onClick={handleReset} size="sm" variant="outline">
-          <Maximize2 className="h-4 w-4" />
+        <Button onClick={handleReset} size="sm" variant="outline" aria-label="Redefinir visualização da árvore">
+          <Maximize2 className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
 
@@ -308,7 +308,17 @@ export function BranchAndCutTree({ nodeHistory, cutHistory = [] }: TreeProps) {
                       e.stopPropagation();
                       setSelectedNode(node);
                     }}
-                    className="cursor-pointer hover:opacity-90 transition-opacity"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setSelectedNode(node);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Nó ${node.id}, Status: ${node.data.status}, Valor Z: ${node.data.objectiveValue}`}
+                    className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   >
                     {node.isOptimal && (
                       <circle

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,9 +37,13 @@ export function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center gap-8">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-              <Calculator className="h-5 w-5" aria-hidden="true" />
-            </div>
+            <Image 
+              src="/icon.svg" 
+              alt="OptiSolver Logo" 
+              width={32} 
+              height={32} 
+              className="rounded-lg shadow-sm"
+            />
             <span>OptiSolver</span>
           </Link>
           <div className="flex gap-2 ml-auto">
@@ -52,7 +57,7 @@ export function Navigation() {
                   variant={isActive ? "default" : "ghost"}
                   className={cn("gap-2", isActive && "pointer-events-none")}
                 >
-                  <Link href={link.href}>
+                  <Link href={link.href} aria-current={isActive ? "page" : undefined}>
                     <Icon className="h-4 w-4" aria-hidden="true" />
                     <span lang={link.lang}>{link.label}</span>
                   </Link>

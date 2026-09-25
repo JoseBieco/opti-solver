@@ -8,51 +8,84 @@ export function AccessibilityBar() {
   const [fontSize, setFontSize] = useState(100);
   const [highContrast, setHighContrast] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [themeColor, setThemeColor] = useState("blue");
 
   useEffect(() => {
-    // Check if user has dark mode preference
-    const isDark = document.documentElement.classList.contains("dark");
-    setDarkMode(isDark);
+    const savedColor = localStorage.getItem("themeColor");
+    if (savedColor) {
+      setThemeColor(savedColor);
+      document.documentElement.dataset.theme = savedColor;
+    }
 
-    // Check if user has high-contrast mode preference
-    const isHighContrast =
-      document.documentElement.classList.contains("contrast");
-    setHighContrast(isHighContrast);
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      setDarkMode(true);
+    } else if (savedTheme === "contrast") {
+      document.documentElement.classList.add("contrast");
+      setHighContrast(true);
+    }
+    
+    const savedFontSize = localStorage.getItem("fontSize");
+    if (savedFontSize) {
+      const size = parseInt(savedFontSize, 10);
+      setFontSize(size);
+      document.documentElement.style.fontSize = `${size}%`;
+    }
   }, []);
 
   const increaseFontSize = () => {
     const newSize = Math.min(fontSize + 10, 150);
     setFontSize(newSize);
     document.documentElement.style.fontSize = `${newSize}%`;
+    localStorage.setItem("fontSize", newSize.toString());
   };
 
   const decreaseFontSize = () => {
     const newSize = Math.max(fontSize - 10, 80);
     setFontSize(newSize);
     document.documentElement.style.fontSize = `${newSize}%`;
+    localStorage.setItem("fontSize", newSize.toString());
   };
 
   const resetFontSize = () => {
     setFontSize(100);
     document.documentElement.style.fontSize = "100%";
+    localStorage.setItem("fontSize", "100");
   };
 
   const toggleContrast = () => {
-    setHighContrast(!highContrast);
-    if (!highContrast) {
+    const newHighContrast = !highContrast;
+    setHighContrast(newHighContrast);
+    if (newHighContrast) {
       document.documentElement.classList.add("contrast");
+      document.documentElement.classList.remove("dark");
+      setDarkMode(false);
+      localStorage.setItem("theme", "contrast");
     } else {
       document.documentElement.classList.remove("contrast");
+      localStorage.removeItem("theme");
     }
   };
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    if (newDarkMode) {
       document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("contrast");
+      setHighContrast(false);
+      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.removeItem("theme");
     }
+  };
+
+  const changeThemeColor = (color: string) => {
+    setThemeColor(color);
+    document.documentElement.dataset.theme = color;
+    localStorage.setItem("themeColor", color);
   };
 
   const skipToMainContent = () => {
@@ -138,6 +171,29 @@ export function AccessibilityBar() {
               <ZoomIn className="h-4 w-4" aria-hidden="true" />
             </Button>
 
+            <div className="w-px h-6 bg-border mx-2" aria-hidden="true" />
+            
+            <div className="flex items-center gap-1 mx-1">
+              <button
+                onClick={() => changeThemeColor("blue")}
+                className={`w-4 h-4 rounded-full bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 ${themeColor === "blue" ? "ring-2 ring-offset-1 ring-blue-600" : ""}`}
+                aria-label="Paleta de cores azul"
+                aria-pressed={themeColor === "blue"}
+              />
+              <button
+                onClick={() => changeThemeColor("purple")}
+                className={`w-4 h-4 rounded-full bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-purple-600 ${themeColor === "purple" ? "ring-2 ring-offset-1 ring-purple-600" : ""}`}
+                aria-label="Paleta de cores roxa"
+                aria-pressed={themeColor === "purple"}
+              />
+              <button
+                onClick={() => changeThemeColor("green")}
+                className={`w-4 h-4 rounded-full bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-green-600 ${themeColor === "green" ? "ring-2 ring-offset-1 ring-green-600" : ""}`}
+                aria-label="Paleta de cores verde"
+                aria-pressed={themeColor === "green"}
+              />
+            </div>
+            
             <div className="w-px h-6 bg-border mx-2" aria-hidden="true" />
 
             <Button
