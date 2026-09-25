@@ -6,6 +6,7 @@ import "./globals.css";
 import { AccessibilityBar } from "@/components/accessibility-bar";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import { BackToTop } from "@/components/back-to-top";
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -15,21 +16,8 @@ export const metadata: Metadata = {
   description:
     "Ferramenta web para resolver problemas de otimização linear e discreta usando Dual Simplex e Branch and Bound",
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: "/icon.svg",
+    apple: "/icon.svg",
   },
 };
 
@@ -39,13 +27,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                let theme = localStorage.getItem('theme');
+                if (theme === 'dark') document.documentElement.classList.add('dark');
+                else if (theme === 'contrast') document.documentElement.classList.add('contrast');
+                
+                let color = localStorage.getItem('themeColor');
+                if (color) document.documentElement.dataset.theme = color;
+                
+                let size = localStorage.getItem('fontSize');
+                if (size) document.documentElement.style.fontSize = size + '%';
+              } catch(e) {}
+            `,
+          }}
+        />
+      </head>
       <body className={`font-sans antialiased`}>
         <AccessibilityBar />
         <Navigation />
         {children}
         <Analytics />
         <Footer />
+        <BackToTop />
       </body>
     </html>
   );
