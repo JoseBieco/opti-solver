@@ -166,7 +166,6 @@ export class BranchAndCutSolver {
         this.logNode(currentRecord);
 
         this.branch(node, result.solution, queue);
-        console.log(`Length queue: ${queue.length}`);
 
         break; // Sai do loop de cortes
       }

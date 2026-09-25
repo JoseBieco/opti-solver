@@ -140,7 +140,6 @@ export class DualSimplexSolver {
       // Pivotar
       this.pivot(pivotRow, pivotCol);
       this.primalIterations++;
-      console.log(this.primalIterations);
     }
     return "MaxIterations";
   }
@@ -214,7 +213,6 @@ export class DualSimplexSolver {
       // Pivotar
       this.pivot(pivotRow, pivotCol);
       this.dualIterations++;
-      console.log(this.dualIterations);
     }
 
     return this.extractSolution(this.dualIterations, "MaxIterations");

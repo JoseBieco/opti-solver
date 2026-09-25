@@ -66,7 +66,8 @@ export interface BCNodeRecord {
     | "Inteiro"
     | "Corte Gerado"
     | "Branched"
-    | "Pruned (Bound)";
+    | "Pruned (Bound)"
+    | "Integer Found";
   objectiveValue: number | string; // Valor ou "N/A"
   solution: string; // Texto legível da solução
   cutsApplied: number; // Quantos cortes foram aplicados NESTE nó
