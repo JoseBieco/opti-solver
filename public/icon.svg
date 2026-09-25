@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <!-- Fundo / Shape -->
+  <rect x="32" y="32" width="448" height="448" rx="100" ry="100" fill="url(#grad)" stroke="none" />
+  
+  <!-- Eixos do gráfico -->
+  <path d="M 120 380 L 380 380" stroke="white" stroke-width="24" />
+  <path d="M 120 380 L 120 120" stroke="white" stroke-width="24" />
+  
+  <!-- Região Factível / Área Otimizada -->
+  <path d="M 120 380 L 320 380 L 260 220 L 120 280 Z" fill="rgba(255, 255, 255, 0.3)" stroke="none" />
+  
+  <!-- Retas / Restrições -->
+  <path d="M 100 300 L 340 180" stroke="white" stroke-width="16" />
+  <path d="M 220 400 L 300 150" stroke="white" stroke-width="16" />
+  
+  <!-- Ponto Ótimo -->
+  <circle cx="260" cy="220" r="24" fill="#fbbf24" stroke="none" />
+  <circle cx="260" cy="220" r="12" fill="white" stroke="none" />
+</svg>

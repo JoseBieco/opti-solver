@@ -157,4 +157,28 @@
   body {
     @apply bg-background text-foreground;
   }
+}/* Purple Theme */
+[data-theme="purple"] {
+  --primary: oklch(0.55 0.2 300);
+  --primary-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.55 0.2 300);
+}
+
+[data-theme="purple"].dark {
+  --primary: oklch(0.65 0.2 300);
+  --primary-foreground: oklch(0.12 0 0);
+  --ring: oklch(0.65 0.2 300);
+}
+
+/* Green Theme */
+[data-theme="green"] {
+  --primary: oklch(0.55 0.2 150);
+  --primary-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.55 0.2 150);
+}
+
+[data-theme="green"].dark {
+  --primary: oklch(0.65 0.2 150);
+  --primary-foreground: oklch(0.12 0 0);
+  --ring: oklch(0.65 0.2 150);
 }
