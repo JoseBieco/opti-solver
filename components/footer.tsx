@@ -11,7 +11,7 @@ export function Footer() {
     >
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-center md:text-left" tabIndex={0}>
+          <div className="text-center md:text-left">
             <p className="text-sm text-muted-foreground">
               &copy; {new Date().getFullYear()} OptiSolver. Desenvolvido com
               <span lang="en">Next.js</span> e <span lang="en">TypeScript</span>
